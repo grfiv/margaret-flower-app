@@ -17,7 +17,18 @@ export const metadata: Metadata = {
   title: "NOVA Northern Virginia Native Plants",
   description: "Native plants database for Northern Virginia region",
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/android-chrome-512x512.png",
+    other: [
+      {
+        rel: "android-chrome",
+        url: "/android-chrome-512x512.png",
+        sizes: "512x512",
+      },
+    ],
   },
 };
 
