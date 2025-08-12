@@ -249,3 +249,5 @@ This project is developed for the Northern Virginia Native Plants Database. All 
 ---
 
 **Built with ❤️ for the NOVA community and native plant enthusiasts.**
+
+_Deployed on Vercel with dynamic user management._
