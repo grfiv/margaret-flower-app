@@ -25,6 +25,18 @@ function getSimplifiedSunOptions(_sunData: unknown[]) {
   return simplifiedOptions;
 }
 
+// Helper function to simplify soil options for better UX
+function getSimplifiedSoilOptions(_soilData: unknown[]) {
+  // Simplify from 7 options to 3 main soil types
+  const simplifiedOptions = [
+    { code: 2, display: "Clay" }, // Will match clay, clay or loam, clay or loam or sandy via compound search
+    { code: 3, display: "Loam" }, // Will match loam, clay or loam, loam or sandy via compound search
+    { code: 4, display: "Sandy" }, // Will match sandy, loam or sandy via compound search
+  ];
+  
+  return simplifiedOptions;
+}
+
 // Helper function to simplify wildlife options for better UX
 function getSimplifiedWildlifeOptions(_wildlifeData: unknown[]) {
   // Define simplified categories with the codes that should map to them
@@ -89,7 +101,7 @@ export async function GET() {
       moisture: getSimplifiedMoistureOptions(moistureRes.data || []),
       sun: getSimplifiedSunOptions(sunRes.data || []),
       wildlife: getSimplifiedWildlifeOptions(wildlifeRes.data || []),
-      soil: (soilRes.data || []).map(item => ({ code: item.soil_code, display: item.soil_display })),
+      soil: getSimplifiedSoilOptions(soilRes.data || []),
       deer: (deerRes.data || []).map(item => ({ code: item.deer_code, display: item.deer_display })),
     });
 
