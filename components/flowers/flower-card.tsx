@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { Modal } from '@/components/ui/modal';
 import type { FlowerRow } from '@/lib/types';
 
@@ -76,7 +77,7 @@ export function FlowerCard({ flower, imagesBase, iconsBase }: Props) {
     const url = icon && iconsBase ? `${iconsBase}/${icon}` : null;
     return (
       <div className="flex items-center gap-2">
-        {url ? <img src={url} alt={label} className="h-6 w-6" loading="lazy" /> : null}
+        {url ? <Image src={url} alt={label} width={24} height={24} className="h-6 w-6" /> : null}
         <span className="text-sm">{label}</span>
       </div>
     );
@@ -101,11 +102,14 @@ export function FlowerCard({ flower, imagesBase, iconsBase }: Props) {
         aria-label={`Open ${flower.common || flower.latin} details`}
       >
         {imageUrl ? (
-          <img
+          <Image
             src={imageUrl}
             alt={flower.common || flower.latin}
+            width={300}
+            height={160}
             className="h-40 w-full rounded-md object-cover"
-            loading="lazy"
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R+Ws5RV02D//9k="
           />
         ) : (
           <div className="grid h-40 w-full place-items-center rounded-md bg-gray-100 text-sm text-gray-500">
@@ -132,11 +136,14 @@ export function FlowerCard({ flower, imagesBase, iconsBase }: Props) {
           <div className="space-y-5">
             {/* Image constrained to viewport height */}
             {imageUrl ? (
-              <img
+              <Image
                 src={imageUrl}
                 alt={flower.common || flower.latin}
+                width={600}
+                height={400}
                 className="w-full max-h-[45vh] rounded-md object-contain"
-                loading="lazy"
+                placeholder="blur"
+                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R+Ws5RV02D//9k="
               />
             ) : null}
 
