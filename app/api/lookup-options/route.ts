@@ -1,6 +1,45 @@
 import { NextResponse } from 'next/server';
 import { supabaseServer } from '@/lib/supabaseServer';
 
+// Helper function to simplify moisture options for better UX
+function getSimplifiedMoistureOptions(moistureData: any[]) {
+  // Simplify from 6 options to 3 most useful ones
+  const simplifiedOptions = [
+    { code: 1, display: "Dry" }, // Will match dry, dry or moist, dry or moist or wet via compound search
+    { code: 4, display: "Moist" }, // Will match moist, moist or wet via compound search  
+    { code: 6, display: "Wet" }, // Will match wet conditions
+  ];
+  
+  return simplifiedOptions;
+}
+
+// Helper function to simplify sun options for better UX
+function getSimplifiedSunOptions(sunData: any[]) {
+  // Simplify from 6 options to 3 most useful ones
+  const simplifiedOptions = [
+    { code: 1, display: "Full Sun" }, // Will match full sun, full or part sun, any via compound search
+    { code: 4, display: "Part Sun" }, // Will match part sun, part sun or shade via compound search
+    { code: 6, display: "Shade" }, // Will match shade conditions
+  ];
+  
+  return simplifiedOptions;
+}
+
+// Helper function to simplify wildlife options for better UX
+function getSimplifiedWildlifeOptions(wildlifeData: any[]) {
+  // Define simplified categories with the codes that should map to them
+  const simplifiedOptions = [
+    { code: 1, display: "Birds" }, // Maps to "Attracts birds."
+    { code: 2, display: "Hummingbirds" }, // Maps to "Attracts hummingbirds."
+    { code: 3, display: "Bees" }, // Maps to "Feeds the bees."
+    { code: 4, display: "Butterflies & Moths" }, // Maps to "Feeds adult butterflies or moths."
+    { code: 5, display: "Butterfly/Moth Larvae" }, // Maps to "Larval host plant."
+    { code: 25, display: "Multiple Wildlife" }, // Maps to complex combo "Birds. Hummingbirds. Bees. Adult butterflies or moths."
+  ];
+  
+  return simplifiedOptions;
+}
+
 export async function GET() {
   try {
     const supabase = await supabaseServer();
@@ -47,9 +86,9 @@ export async function GET() {
       categories: (categoriesRes.data || []).map(item => ({ code: item.cat_code, display: item.cat_display })),
       height: (heightRes.data || []).map(item => ({ code: item.height_code, display: item.height_display })),
       bloom: (bloomRes.data || []).map(item => ({ code: item.bloom_code, display: item.bloom_display })),
-      moisture: (moistureRes.data || []).map(item => ({ code: item.moist_code, display: item.moist_display })),
-      sun: (sunRes.data || []).map(item => ({ code: item.sun_code, display: item.sun_display })),
-      wildlife: (wildlifeRes.data || []).map(item => ({ code: item.wild_code, display: item.wildlife_display })),
+      moisture: getSimplifiedMoistureOptions(moistureRes.data || []),
+      sun: getSimplifiedSunOptions(sunRes.data || []),
+      wildlife: getSimplifiedWildlifeOptions(wildlifeRes.data || []),
       soil: (soilRes.data || []).map(item => ({ code: item.soil_code, display: item.soil_display })),
       deer: (deerRes.data || []).map(item => ({ code: item.deer_code, display: item.deer_display })),
     });
