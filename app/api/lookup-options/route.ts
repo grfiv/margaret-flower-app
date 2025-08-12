@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { supabaseServer } from '@/lib/supabaseServer';
 
 // Helper function to simplify moisture options for better UX
-function getSimplifiedMoistureOptions(moistureData: any[]) {
+function getSimplifiedMoistureOptions(_moistureData: unknown[]) {
   // Simplify from 6 options to 3 most useful ones
   const simplifiedOptions = [
     { code: 1, display: "Dry" }, // Will match dry, dry or moist, dry or moist or wet via compound search
@@ -14,7 +14,7 @@ function getSimplifiedMoistureOptions(moistureData: any[]) {
 }
 
 // Helper function to simplify sun options for better UX
-function getSimplifiedSunOptions(sunData: any[]) {
+function getSimplifiedSunOptions(_sunData: unknown[]) {
   // Simplify from 6 options to 3 most useful ones
   const simplifiedOptions = [
     { code: 1, display: "Full Sun" }, // Will match full sun, full or part sun, any via compound search
@@ -26,7 +26,7 @@ function getSimplifiedSunOptions(sunData: any[]) {
 }
 
 // Helper function to simplify wildlife options for better UX
-function getSimplifiedWildlifeOptions(wildlifeData: any[]) {
+function getSimplifiedWildlifeOptions(_wildlifeData: unknown[]) {
   // Define simplified categories with the codes that should map to them
   const simplifiedOptions = [
     { code: 1, display: "Birds" }, // Maps to "Attracts birds."
