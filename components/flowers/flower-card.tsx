@@ -118,8 +118,8 @@ export function FlowerCard({ flower, imagesBase, iconsBase }: Props) {
         ) : null}
         <p className="mt-1 text-xs text-gray-500">
           ID: {flower.id}
-          {flower.height?.height_display ? <> · {flower.height.height_display}</> : null}
-          {flower.categories?.cat_display ? <> · {flower.categories.cat_display}</> : null}
+          {flower.height?.[0]?.height_display ? <> · {flower.height[0].height_display}</> : null}
+          {flower.categories?.[0]?.cat_display ? <> · {flower.categories[0].cat_display}</> : null}
         </p>
       </button>
 
