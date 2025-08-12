@@ -35,34 +35,106 @@ export default async function Page({ searchParams }: PageProps) {
 
   const supabase = await supabaseServer();
 
-  let query = supabase
-    .from('flowers')
-    .select('*')
-    .order('latin', { ascending: true });
-
-  // Apply text search
+  // For text search, we need to find flowers that match in lookup tables
+  // We'll do this by building a custom query that includes lookup table searches
+  let flowersData;
   if (q) {
-    query = query.or(`latin.ilike.%${q}%,common.ilike.%${q}%,region.ilike.%${q}%,design_function.ilike.%${q}%,gardening_tips.ilike.%${q}%,wildlife_comments.ilike.%${q}%,ph.ilike.%${q}%`);
-  }
+    // First get all lookup table values that match the search term
+    const [moistureMatches, sunMatches, bloomMatches, heightMatches, categoryMatches] = await Promise.all([
+      supabase.from('moisture').select('moist_code').ilike('moist_display', `%${q}%`),
+      supabase.from('sun').select('sun_code').ilike('sun_display', `%${q}%`),
+      supabase.from('bloom').select('bloom_code').ilike('bloom_display', `%${q}%`),
+      supabase.from('height').select('height_code').ilike('height_display', `%${q}%`),
+      supabase.from('categories').select('cat_code').ilike('cat_display', `%${q}%`),
+    ]);
 
-  // Apply filter constraints
-  Object.entries(filters).forEach(([key, value]) => {
-    if (value > 0) {
-      query = query.eq(key, value);
+    // Extract the matching codes
+    const moistureCodes = (moistureMatches.data || []).map(m => m.moist_code);
+    const sunCodes = (sunMatches.data || []).map(s => s.sun_code);
+    const bloomCodes = (bloomMatches.data || []).map(b => b.bloom_code);
+    const heightCodes = (heightMatches.data || []).map(h => h.height_code);
+    const categoryCodes = (categoryMatches.data || []).map(c => c.cat_code);
+
+    // Build query with all possible matches
+    let query = supabase
+      .from('flowers')
+      .select('*')
+      .order('latin', { ascending: true });
+
+    // Create OR conditions for all search possibilities
+    const conditions = [
+      `latin.ilike.%${q}%`,
+      `common.ilike.%${q}%`,
+      `region.ilike.%${q}%`,
+      `design_function.ilike.%${q}%`,
+      `gardening_tips.ilike.%${q}%`,
+      `wildlife_comments.ilike.%${q}%`,
+      `ph.ilike.%${q}%`,
+    ];
+
+    // Add lookup table matches
+    if (moistureCodes.length > 0) {
+      conditions.push(`moist_code.in.(${moistureCodes.join(',')})`);
     }
-  });
+    if (sunCodes.length > 0) {
+      conditions.push(`sun_code.in.(${sunCodes.join(',')})`);
+    }
+    if (bloomCodes.length > 0) {
+      conditions.push(`bloom_code.in.(${bloomCodes.join(',')})`);
+    }
+    if (heightCodes.length > 0) {
+      conditions.push(`height_code.in.(${heightCodes.join(',')})`);
+    }
+    if (categoryCodes.length > 0) {
+      conditions.push(`cat_code.in.(${categoryCodes.join(',')})`);
+    }
 
-  const { data: flowersData, error } = await query;
+    query = query.or(conditions.join(','));
+    
+    // Apply filter constraints
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value > 0) {
+        query = query.eq(key, value);
+      }
+    });
 
-  if (error) {
-    console.error('flowers query error:', error);
-    return (
-      <MainPageWithSearch searchQuery={q}>
-        <p className="mt-6 rounded-lg border border-red-200 bg-red-50 p-3 text-red-700">
-          Failed to load flowers.
-        </p>
-      </MainPageWithSearch>
-    );
+    const result = await query;
+    flowersData = result.data;
+    if (result.error) {
+      console.error('flowers query error:', result.error);
+      return (
+        <MainPageWithSearch searchQuery={q}>
+          <p className="mt-6 rounded-lg border border-red-200 bg-red-50 p-3 text-red-700">
+            Failed to load flowers.
+          </p>
+        </MainPageWithSearch>
+      );
+    }
+  } else {
+    // No search term, just apply filters
+    let query = supabase
+      .from('flowers')
+      .select('*')
+      .order('latin', { ascending: true });
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value > 0) {
+        query = query.eq(key, value);
+      }
+    });
+
+    const result = await query;
+    flowersData = result.data;
+    if (result.error) {
+      console.error('flowers query error:', result.error);
+      return (
+        <MainPageWithSearch searchQuery={q}>
+          <p className="mt-6 rounded-lg border border-red-200 bg-red-50 p-3 text-red-700">
+            Failed to load flowers.
+          </p>
+        </MainPageWithSearch>
+      );
+    }
   }
 
   // Fetch lookup data for display names

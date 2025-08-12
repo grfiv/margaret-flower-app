@@ -28,8 +28,14 @@ export type Flower = {
 };
 
 export type FlowerRow = Flower & {
-  // Joined lookup data for display (Supabase returns arrays even for single joins)
-  height?: { height_display: string }[] | null;
-  categories?: { cat_display: string }[] | null;
+  // Joined lookup data for display (Supabase returns single objects, not arrays for 1:1 joins)
+  height?: { height_display: string } | null;
+  categories?: { cat_display: string } | null;
+  bloom?: { bloom_display: string } | null;
+  moisture?: { moist_display: string } | null;
+  sun?: { sun_display: string } | null;
+  wildlife?: { wildlife_display: string } | null;
+  soil?: { soil_display: string } | null;
+  deer?: { deer_display: string } | null;
 };
 export type UpsertInput = Omit<Flower, 'id'> & { id?: number };
