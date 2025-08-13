@@ -18,17 +18,11 @@ export const metadata: Metadata = {
   description: "Native plants database for Northern Virginia region",
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.ico", sizes: "32x32" },
       { url: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" },
     ],
     apple: "/android-chrome-512x512.png",
-    other: [
-      {
-        rel: "android-chrome",
-        url: "/android-chrome-512x512.png",
-        sizes: "512x512",
-      },
-    ],
+    shortcut: "/android-chrome-512x512.png",
   },
 };
 
