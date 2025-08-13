@@ -19,6 +19,7 @@ export const metadata: Metadata = {
   description: "Native plants database for Northern Virginia region",
   icons: {
     icon: [
+      { url: "/favicon.ico", sizes: "any" },
       { url: "/android-chrome-512x512.png", sizes: "32x32", type: "image/png" },
       { url: "/android-chrome-512x512.png", sizes: "192x192", type: "image/png" },
       { url: "/android-chrome-512x512.png", sizes: "512x512", type: "image/png" },
@@ -26,16 +27,8 @@ export const metadata: Metadata = {
     apple: [
       { url: "/android-chrome-512x512.png", sizes: "180x180", type: "image/png" },
     ],
-    shortcut: "/android-chrome-512x512.png",
+    shortcut: "/favicon.ico",
   },
-  other: [
-    {
-      rel: "icon",
-      url: "/android-chrome-512x512.png",
-      type: "image/png",
-      sizes: "32x32",
-    },
-  ],
 };
 
 export default function RootLayout({
