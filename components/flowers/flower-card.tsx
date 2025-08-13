@@ -48,7 +48,7 @@ export function FlowerCard({ flower, imagesBase, iconsBase }: Props) {
   const [loading, setLoading] = useState(false);
   const [loadErr, setLoadErr] = useState<string | null>(null);
 
-  const imageUrl = flower.image_name ? `${imagesBase}/${flower.image_name}` : null;
+  const imageUrl = flower.image_name ? `${imagesBase}/${encodeURIComponent(flower.image_name)}` : null;
 
   // Fetch full detail lazily when opening
   useEffect(() => {
@@ -74,7 +74,7 @@ export function FlowerCard({ flower, imagesBase, iconsBase }: Props) {
 
   const IconLabel = ({ icon, label }: { icon?: string | null; label?: string | null }) => {
     if (!label) return null;
-    const url = icon && iconsBase ? `${iconsBase}/${icon}` : null;
+    const url = icon && iconsBase ? `${iconsBase}/${encodeURIComponent(icon)}` : null;
     return (
       <div className="flex items-center gap-2">
         {url ? <Image src={url} alt={label} width={24} height={24} className="h-6 w-6" /> : null}
